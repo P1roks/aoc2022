@@ -1,12 +1,11 @@
 use std::ops as op;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Change {
-    Number(u16),
+    Number(u32),
     Old,
 }
-
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Oper {
     Plus,
     Minus,
@@ -49,36 +48,41 @@ impl Oper {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Monkey {
-    pub items: Vec<u16>,
+    pub items: Vec<u32>,
     pub oper: Oper,
     pub change: Change,
-    pub test: u16,
+    pub test: u32,
     pub true_idx: usize,
     pub false_idx: usize,
+    pub operations: u32,
 }
 
 impl Monkey {
     pub fn do_round(monkeys: &mut Vec<Monkey>) //, monkeys: &mut Vec<Monkey>) {
     {
-        for monkey in monkeys {
-            for item in monkey.items.drain(..) {
-                let change = match monkey.change {
+        for i in 0..monkeys.len() {
+            let monkey_clone = monkeys[i].clone();
+            monkeys[i].operations += monkey_clone.items.len() as u32;
+
+            for item in monkey_clone.items {
+                let change = match monkey_clone.change {
                     Change::Number(x) => x,
                     Change::Old => item,
                 };
 
-                let new_worry = monkey.oper.do_oper(item, change) / 3;
+                let new_worry = monkey_clone.oper.do_oper(item, change) / 3;
 
-                let idx = if new_worry % monkey.test == 0 {
-                    monkey.true_idx
+                let idx = if new_worry % monkey_clone.test == 0 {
+                    monkey_clone.true_idx
                 } else {
-                    monkey.false_idx
+                    monkey_clone.false_idx
                 };
 
                 monkeys[idx].items.push(new_worry);
             }
+            monkeys[i].items.clear();
         }
     }
 }
