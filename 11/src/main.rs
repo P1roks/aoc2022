@@ -6,6 +6,7 @@ use std::{
 };
 
 use monkey::*;
+use num_bigint::BigUint;
 
 fn parse_input(input: &str) -> Vec<Monkey> {
     let mut monkeys = Vec::new();
@@ -42,7 +43,7 @@ fn parse_input(input: &str) -> Vec<Monkey> {
                 x.chars()
                     .take_while(|x| *x != ',')
                     .collect::<String>()
-                    .parse::<u32>()
+                    .parse::<u64>()
                     .unwrap()
             })
             .collect();
@@ -52,13 +53,13 @@ fn parse_input(input: &str) -> Vec<Monkey> {
             let mut operation = lines.next().unwrap().split(' ').rev();
             let change = match operation.next().unwrap() {
                 "old" => Change::Old,
-                number @ _ => Change::Number(number.parse::<u32>().unwrap()),
+                number @ _ => Change::Number(number.parse::<u64>().unwrap()),
             };
             let oper = Oper::from_str(operation.next().unwrap());
             (oper, change)
         };
 
-        let test = get_last_number::<u32>(&mut lines);
+        let test = get_last_number::<u64>(&mut lines);
         let true_idx = get_last_number::<usize>(&mut lines);
         let false_idx = get_last_number::<usize>(&mut lines);
 
@@ -75,10 +76,7 @@ fn parse_input(input: &str) -> Vec<Monkey> {
     monkeys
 }
 
-fn main() {
-    let file = include_str!("input");
-    let mut monkeys = parse_input(file);
-
+fn part1(mut monkeys: Vec<Monkey>) {
     for _ in 0..20 {
         Monkey::do_round(&mut monkeys);
     }
@@ -88,4 +86,23 @@ fn main() {
     operations_count.sort_by_key(|&key| Reverse(key));
     let result = operations_count.iter().take(2).product::<u32>();
     println!("{result}");
+}
+
+fn part2(mut monkeys: Vec<Monkey>) {
+    let common_div = monkeys.iter().map(|x| x.test).product();
+    for _ in 0..10000 {
+        Monkey::do_round_part2(&mut monkeys, common_div);
+    }
+
+    let mut operations_count = monkeys.iter().map(|x| x.operations).collect::<Vec<_>>();
+
+    operations_count.sort_by_key(|&key| Reverse(key));
+    let result = operations_count.iter().take(2).product::<BigUint>();
+    println!("{result}");
+}
+fn main() {
+    let file = include_str!("input");
+    let mut monkeys = parse_input(file);
+    //part1(monkeys);
+    part2(monkeys);
 }
