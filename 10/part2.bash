@@ -1,6 +1,6 @@
 #!/bin/sh
 
-cat input | awk '
+awk '
 BEGIN {cycle = 0; x=1;}
 function draw(){
 	if (cycle % 40 == 0){
@@ -15,4 +15,4 @@ function draw(){
 }
 $2=="" {++cycle;draw(); next;}
 {++cycle;draw();++cycle;draw();x+=$2}
-'
+' input
