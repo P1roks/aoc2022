@@ -23,8 +23,7 @@ impl Priority for char {
 }
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open("./input")?;
-    let reader = BufReader::new(file);
+    let file = include_str!("./input");
     let mut sum: u32 = 0;
 
     for line in reader.lines() {

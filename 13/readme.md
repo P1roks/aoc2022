@@ -1,0 +1,2 @@
+# Day 13
+After seeing input for this one I thought to myself: "This looks a lot like a [J|T]S array, so let's go with TS". That was a mistake. A huge one. I really can't express how much I dislike these language with all their high level bs that is so high level and arbitrary that it really is like learning assembly with its arbitrary rules. As for the solution itself - nothing too complex - part 1 is just rewriting the process which they described on the site to compare pairs and part2 is just adding two pairs and the using the function from part1 as a sort condition

@@ -51,17 +51,16 @@ fn get_digit(curr_no: i64, idx: usize) -> (char, i64) {
             2 => ('2', 0),
             -1 => ('-', 0),
             -2 => ('=', 0),
-            _ => ('0', 0),
-            // _ => unreachable!("not possible!"),
+            _ => unreachable!("not possible!"),
         };
     }
 
     println!("curr = {curr_no} max = {max_val} prev_max = {prev_max}");
 
-    //Edge cases, edge cases, edge cases, love 'em or hate 'em they're present
     if prev_max > curr_no.abs() {
         return ('0', curr_no);
     } else if curr_no.is_positive() {
+        //edge cases, edge cases, edge cases, love 'em or hate 'em they're here
         if (curr_no - max_val).abs() < prev_max
             || (curr_no - MAX_VALS[idx]).abs() == max_val
             || curr_no == prev_max + 1

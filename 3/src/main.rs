@@ -22,16 +22,26 @@ impl Priority for char {
         Ok(self_bytes - 96)
     }
 }
-
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open("./input")?;
-    let reader = BufReader::new(file);
-    let mut lines = reader.lines();
+fn part1(file: &str) {
     let mut sum: u32 = 0;
 
-    while let (Some(Ok(line1)), Some(Ok(line2)), Some(Ok(line3))) =
-        (lines.next(), lines.next(), lines.next())
-    {
+    for line in file.lines() {
+        let (comp_1, comp_2) = line.split_at(line.len() / 2);
+        for chr in comp_1.as_bytes().iter() {
+            let real_chr = *chr as char;
+            if comp_2.contains(real_chr) {
+                sum += real_chr.to_priority().unwrap() as u32;
+                break;
+            }
+        }
+    }
+    println!("part1: {sum}");
+}
+fn part2(file: &str) {
+    let mut lines = file.lines();
+    let mut sum: u32 = 0;
+
+    while let (Some(line1), Some(line2), Some(line3)) = (lines.next(), lines.next(), lines.next()) {
         for chr in line1.as_bytes().iter() {
             let real_chr = *chr as char;
             if line2.contains(real_chr) && line3.contains(real_chr) {
@@ -40,6 +50,11 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
         }
     }
-    print!("{sum}");
-    Ok(())
+    println!("part2: {sum}");
+}
+
+fn main() {
+    let file = include_str!("./input");
+    part1(file);
+    part2(file);
 }

@@ -3,13 +3,11 @@ use std::{
     io::{BufRead, BufReader},
 };
 
-fn main() -> Result<(), Box<dyn std::error::Error>> {
-    let file = File::open("./input")?;
-    let reader = BufReader::new(file);
+fn main() {
+    let file = include_str!("./input");
     let mut sum = 0;
 
-    for line in reader.lines() {
-        let line = line?;
+    for line in file.lines() {
         if let Some((range1, range2)) = line.split_once(',') {
             let (r1n1, r1n2) = range1.split_once('-').unwrap();
             let (r2n1, r2n2) = range2.split_once('-').unwrap();
@@ -21,15 +19,8 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             if r1n1 <= r2n2 && r2n1 <= r1n2 {
                 sum += 1;
             }
-
-            /* if r1n1 <= r2n1 || r1n2 >= r2n2 {
-                sum += 1;
-            } else if r2n1 <= r1n1 || r2n2 >= r1n2 {
-                sum += 1;
-            } */
         }
     }
 
     print!("{sum}");
-    Ok(())
 }
